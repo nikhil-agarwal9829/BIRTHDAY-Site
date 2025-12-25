@@ -31,6 +31,10 @@ $('document').ready(function(){
 	$('#play').click(function(){
 		var audio = $('.song')[0];
         audio.play();
+        isMusicPlaying = true;
+        // Update music control button
+        $('#music_control').find('.music-text').text('Stop Music');
+        $('#music_control').css('background', 'linear-gradient(135deg, #FFB6C1 0%, #FF6B9D 50%, #C4515C 100%)');
         $('#bulb_yellow').addClass('bulb-glow-yellow-after');
 		$('#bulb_red').addClass('bulb-glow-red-after');
 		$('#bulb_blue').addClass('bulb-glow-blue-after');
@@ -160,38 +164,202 @@ $('document').ready(function(){
 		$('.balloons').css('opacity','0.9');
 		$('.balloons h2').fadeIn(3000);
 		$(this).fadeOut('slow').delay(3000).promise().done(function(){
+			$('#cake_cut').fadeIn('slow');
+		});
+	});
+
+	$('#cake_cut').click(function(){
+		// Add cake cutting animation
+		$('.cake').css({
+			'transform': 'scale(0.8)',
+			'transition': 'all 0.5s ease'
+		});
+		
+		// Create cutting effect - split the cake visually
+		setTimeout(function() {
+			$('.cake').css({
+				'transform': 'scale(1.1) rotate(5deg)',
+				'transition': 'all 0.3s ease'
+			});
+		}, 500);
+		
+		setTimeout(function() {
+			$('.cake').css({
+				'transform': 'scale(1) rotate(0deg)',
+				'transition': 'all 0.5s ease'
+			});
+			// Blow out candles
+			$('.fuego').fadeOut('slow');
+		}, 800);
+		
+		// Add confetti or celebration effect
+		$('.cake').addClass('cake-cut');
+		
+		$(this).fadeOut('slow').delay(2000).promise().done(function(){
 			$('#story').fadeIn('slow');
 		});
 	});
 	
+	// Message control functionality
+	var isPaused = false;
+	var currentMessageIndex = 1;
+	var msgLoopTimeout = null;
+	var autoPlayTimeout = null;
+	var totalMessages = 0;
+
+	function updateButtonText() {
+		var btnText = $('#pause_resume').find('.btn-text');
+		// Keep button width fixed to prevent position changes
+		if(isPaused) {
+			// When paused, show resume text
+			btnText.fadeOut(200, function() {
+				$(this).text('OK Now Ready to be Overlove Again').fadeIn(200);
+			});
+			$('#pause_resume').css('background', 'linear-gradient(135deg, #FFB6C1 0%, #FF6B9D 50%, #C4515C 100%)');
+		} else {
+			// When playing, show pause text
+			btnText.fadeOut(200, function() {
+				$(this).text('Happiness Overloaded! Press and Take a Breath').fadeIn(200);
+			});
+			$('#pause_resume').css('background', 'linear-gradient(135deg, #FF6B9D 0%, #C4515C 50%, #FFB6C1 100%)');
+		}
+	}
+
+	// Music control functionality
+	var isMusicPlaying = false;
+	var audioElement = null;
+
+	// Initialize music control button
+	audioElement = $('.song')[0];
+	if(audioElement) {
+		audioElement.addEventListener('play', function() {
+			isMusicPlaying = true;
+			$('#music_control').find('.music-text').text('Stop Music');
+			$('#music_control').css('background', 'linear-gradient(135deg, #FFB6C1 0%, #FF6B9D 50%, #C4515C 100%)');
+		});
+		audioElement.addEventListener('pause', function() {
+			isMusicPlaying = false;
+			$('#music_control').find('.music-text').text('Music');
+			$('#music_control').css('background', 'linear-gradient(135deg, #FF6B9D 0%, #C4515C 50%, #FFB6C1 100%)');
+		});
+	}
+
+	$('#music_control').click(function(){
+		if(!audioElement) {
+			audioElement = $('.song')[0];
+		}
+		
+		if(isMusicPlaying) {
+			// Stop music
+			audioElement.pause();
+		} else {
+			// Start music
+			audioElement.play();
+		}
+	});
+
+	function showMessage(index) {
+		if(index < 1 || index > totalMessages) {
+			return;
+		}
+		
+		// Stop all animations
+		$('.message p').stop(true, false);
+		clearTimeout(msgLoopTimeout);
+		clearTimeout(autoPlayTimeout);
+		
+		// Hide all messages
+		$('.message p').fadeOut('fast');
+		
+		// Show current message
+		setTimeout(function() {
+			$("p:nth-child("+index+")").fadeIn('slow');
+			currentMessageIndex = index;
+			
+			// Auto play next if not paused
+			if(!isPaused && index < totalMessages) {
+				autoPlayTimeout = setTimeout(function() {
+					if(!isPaused) {
+						showMessage(index + 1);
+					}
+				}, 2000);
+			}
+		}, 300);
+	}
+
+	function showPreviousMessage() {
+		if(currentMessageIndex > 1) {
+			showMessage(currentMessageIndex - 1);
+		}
+	}
+
+	function showNextMessage() {
+		if(currentMessageIndex < totalMessages) {
+			showMessage(currentMessageIndex + 1);
+		}
+	}
+
+	$('#pause_resume').click(function(){
+		isPaused = !isPaused;
+		updateButtonText();
+		
+		if(!isPaused && currentMessageIndex < totalMessages) {
+			// Resume auto play
+			autoPlayTimeout = setTimeout(function() {
+				if(!isPaused) {
+					showMessage(currentMessageIndex + 1);
+				}
+			}, 2000);
+		} else {
+			// Pause - stop auto play
+			clearTimeout(autoPlayTimeout);
+		}
+	});
+
+	$('#prev_message').click(function(){
+		showPreviousMessage();
+		// If auto-playing, reset the timer
+		if(!isPaused && currentMessageIndex < totalMessages) {
+			clearTimeout(autoPlayTimeout);
+			autoPlayTimeout = setTimeout(function() {
+				if(!isPaused) {
+					showMessage(currentMessageIndex + 1);
+				}
+			}, 2000);
+		}
+	});
+
+	$('#next_message').click(function(){
+		showNextMessage();
+		// If auto-playing, reset the timer
+		if(!isPaused && currentMessageIndex < totalMessages) {
+			clearTimeout(autoPlayTimeout);
+			autoPlayTimeout = setTimeout(function() {
+				if(!isPaused) {
+					showMessage(currentMessageIndex + 1);
+				}
+			}, 2000);
+		}
+	});
+
 	$('#story').click(function(){
 		$(this).fadeOut('slow');
 		$('.cake').fadeOut('fast').promise().done(function(){
 			$('.message').fadeIn('slow');
 			// Hide all messages initially
 			$('.message p').hide();
+			// Show message controls
+			$('.message-controls-container').css('display', 'flex').hide().fadeIn('slow');
 		});
 		
-		var i;
-
-		function msgLoop (i) {
-			$("p:nth-child("+i+")").fadeOut('slow').delay(800).promise().done(function(){
-				i=i+1;
-				$("p:nth-child("+i+")").fadeIn('slow').delay(1000).promise().done(function(){
-					var totalMessages = $('.message p').length;
-					// Continue with all messages, no cake appears during message sequence
-					if(i < totalMessages) {
-						msgLoop(i);
-					}
-				});
-			});
-		}
+		totalMessages = $('.message p').length;
+		isPaused = false;
+		currentMessageIndex = 1;
 		
 		// Start with first message after message container is visible
 		setTimeout(function() {
-			$("p:nth-child(1)").fadeIn('slow').delay(1000).promise().done(function(){
-				msgLoop(1);
-			});
+			showMessage(1);
+			updateButtonText();
 		}, 500);
 		
 	});

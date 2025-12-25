@@ -35,6 +35,10 @@
         <source src="hbd.mp3"></source>
 	   Your browser isn't invited for super fun audio time.
     </audio>
+    <button class="btn-music-control" id="music_control">
+    	<span class="music-icon">🎵</span>
+    	<span class="music-text">Music</span>
+    </button>
    
     <div class="balloons text-center" id="b2">
     	<h2 style="color:#0719D4;">D</h2>
@@ -98,6 +102,19 @@
 			</div>
 		</div>
 		<div class="row message">
+			<div class="message-controls-container">
+				<button class="btn-message-control btn-prev" id="prev_message">
+					<span class="btn-icon">←</span>
+					<span class="btn-text">missed the previous line cuttiie</span>
+				</button>
+				<button class="btn-message-control btn-pause-resume" id="pause_resume">
+					<span class="btn-text">Happiness Overloaded!Take a Breath</span>
+				</button>
+				<button class="btn-message-control btn-next" id="next_message">
+					<span class="btn-text">aage bahut kuch he baccha</span>
+					<span class="btn-icon">→</span>
+				</button>
+			</div>
 			<div class="col-md-12">
 				<p>Today is...</p>
 				<p>as beautiful as other days</p>
@@ -223,7 +240,7 @@
 					<button class="btn btn-primary" id="light_candle"> Light Candle</button>
 					<button class="btn btn-primary" id="wish_message">Happy Birthday</button>
 					<button class="btn btn-primary" id="story">A mesage for you</button>
-					<!-- <button class="btn btn-primary" id="cake_cut">Lrt's Cut the Cake</button> -->
+					<button class="btn btn-primary" id="cake_cut">Let's Cut the Cake</button>
 				</div>
 			</div>
 			<!-- <div class="col-md-2">
