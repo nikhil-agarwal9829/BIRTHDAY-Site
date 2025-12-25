@@ -38,9 +38,3 @@ This project is built with a focus on simplicity and performance, using fundamen
 
 ---
 
-<h1 class="happy-birthday">Happy Birthday Your-Name</h1>
-```
-
-## Star History
-
-[![Star History Chart](https://api.star-history.com/svg?repos=sapthesh/Birthday&type=Date)](https://www.star-history.com/#sapthesh/Birthday&Date)
