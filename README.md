@@ -38,52 +38,6 @@ This project is built with a focus on simplicity and performance, using fundamen
 
 ---
 
-## 🚀 Getting Started
-
-To get a local copy up and running, follow these simple steps.
-
-### Prerequisites
-
-You will need either Python or Node.js installed on your machine to run a local web server.
-
-### Installation & Local Setup
-
-1.  **Clone the repository:**
-    ```bash
-    git clone [https://github.com/sapthesh/Birthday.git](https://github.com/sapthesh/Birthday.git)
-    ```
-2.  **Navigate to the project directory:**
-    ```bash
-    cd Birthday
-    ```
-3.  **Run a local server:**
-
-    * **Using Python:**
-        ```bash
-        python -m SimpleHTTPServer 8081
-        ```
-        Then, open your browser and navigate to `http://localhost:8081`.
-
-    * **Using Node.js:**
-        First, install the dependencies:
-        ```bash
-        npm install
-        ```
-        Then, run the server:
-        ```bash
-        npm run server-node
-        ```
-        And navigate to `http://localhost:8081` in your browser.
-
----
-
-## 🎮 Usage
-
-To customize this template for your own use, you can edit the `index.html` file to change the name and messages.
-
-For example, to change the name, find the following line in `index.html` and replace "Present Name" with the desired name:
-
-```html
 <h1 class="happy-birthday">Happy Birthday Your-Name</h1>
 ```
 
